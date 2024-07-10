@@ -5,7 +5,13 @@ terraform {
       version = "5.55.0"
     }
   }
+  backend "s3" {
+    bucket = "nanadevopsacademy-assignment"
+    key    = "backend/dev/nana/terraformstate"
+    region = "us-east-1"
+  }
 }
+
 
 provider "aws" {
   region = "us-east-1"
@@ -17,7 +23,7 @@ provider "aws" {
 }
 
 resource "aws_iam_user" "test" {
-  name = "Kofi"
+  name = var.user_name
 
 
 }
@@ -42,11 +48,10 @@ data "aws_iam_policy_document" "code" {
 }
 
 resource "aws_iam_policy" "policy1" {
-  name   = "NanaPolicy"
+  name   = var.policy_name
   path   = "/"
   policy = data.aws_iam_policy_document.code.json
 }
-
 
 resource "aws_iam_user_policy_attachment" "test-attach" {
   user       = aws_iam_user.test.name
@@ -56,25 +61,25 @@ resource "aws_iam_user_policy_attachment" "test-attach" {
 
 resource "aws_iam_user_policy_attachment" "test-attach2" {
   user       = aws_iam_user.test.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = var.policy_arn
 }
 
 resource "aws_instance" "web" {
-  ami           = "ami-06c68f701d8090592"
-  instance_type = "t2.micro"
+  ami           = var.ami_web
+  instance_type = var.instance_type_web
 
   tags = {
-    Name = "Myinstance1"
+    Name = var.tagName1
   }
 }
 
 resource "aws_instance" "webweb" {
-  ami           = "ami-08ca6be1dc85b0e84"
+  ami           = var.ami_webweb
   provider = aws.new
-  instance_type = "t2.micro"
+  instance_type = var.instance_type_webweb
 
   tags = {
-    Name = "Myinstance2"
+    Name = var.tagName2
   }
 }
 
