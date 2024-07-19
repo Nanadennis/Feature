@@ -1,26 +1,7 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.55.0"
-    }
-  }
-  backend "s3" {
-    bucket = "nanadevopsacademy-assignment"
-    key    = "backend/dev/nana/terraformstate"
-    region = "us-east-1"
-  }
-}
+    
 
 
-provider "aws" {
-  region = "us-east-1"
-}
 
-provider "aws" {
-  alias  = "new"
-  region = "eu-west-1"
-}
 
 resource "aws_iam_user" "test" {
   name = var.user_name
@@ -30,22 +11,7 @@ resource "aws_iam_user" "test" {
 
 
 
-data "aws_iam_policy_document" "code" {
-  statement {
-    sid = "NanaPolicy"
 
-    actions = [
-      "s3:ListAllMyBuckets",
-      "s3:GetBucketLocation",
-    ]
-
-    resources = [
-      "arn:aws:s3:::*",
-    ]
-  }
-
-
-}
 
 resource "aws_iam_policy" "policy1" {
   name   = var.policy_name
@@ -83,13 +49,14 @@ resource "aws_instance" "webweb" {
   }
 }
 
-output "ec2id" {
-  value = aws_instance.web.private_ip
+
+provider "aws" {
+  region = "us-east-1"
 }
 
-output "userid" {
-  value = aws_iam_user.test.arn
+provider "aws" {
+  alias  = "new"
+  region = "eu-west-1"
 }
-
 
 
