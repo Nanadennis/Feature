@@ -11,6 +11,8 @@ module "server" {
   instance_type_web =var.instance_type_web 
   instance_type_webweb =var.instance_type_webweb
   ami_webweb =var.ami_webweb
+  tagName1 =var.tagName1
+  tagName2 =var.tagName2
   
 }
 
